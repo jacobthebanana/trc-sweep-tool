@@ -1,4 +1,6 @@
 #!/bin/bash
 PYTHON=~/project/env/bin/python3
 cd ~/project/
-${PYTHON} wandb agent ${wandb_sweep}
+source ~/project/env/bin/activate
+export HF_DATASETS_CACHE="/dev/shm"
+${PYTHON} -m wandb agent ${wandb_sweep}

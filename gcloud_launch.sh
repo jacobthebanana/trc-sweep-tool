@@ -17,8 +17,9 @@ do gcloud compute tpus tpu-vm create ${swift_vm_prefix}_${index} \
         sudo mkdir -pv /mnt/swift
         sudo mount -o discard,defaults /dev/sdb /mnt/swift
         source /mnt/swift/.env
-        bash swift_setup.sh
-        bash sweep_launch.sh
+        cd /mnt/swift
+        bash sweeper_setup.sh
+        bash sweeper_launch.sh
         EOF'
 
 done
