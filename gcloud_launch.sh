@@ -18,7 +18,7 @@ do gcloud compute tpus tpu-vm create ${sweeper_vm_prefix}_${index} \
     --data-disk source=projects/${gcp_project_id}/zones/${gcp_zone}/disks/${destination_disk_name},mode=read-only \
     --metadata startup-script='#! /bin/bash
         sudo mkdir -pv /mnt/swift
-        sudo mount -o defaults /dev/sdb /mnt/swift
+        sudo mount -o noload /dev/sdb /mnt/swift
         source /mnt/swift/.env
         cd /mnt/swift
         bash sweeper_setup.sh
