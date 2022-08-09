@@ -6,16 +6,16 @@ gcloud compute disks create ${destination_disk_name} \
     --source-disk=projects/${gcp_project_id}/zones/${gcp_zone}/disks/${source_disk_name}
 
 
-for index in {01..30} 
+for index in {01..30}
 do gcloud compute tpus tpu-vm create ${sweeper_vm_prefix}_${index} \
     --project=${gcp_project_id} \
     --zone=${gcp_zone} \
     --accelerator-type=${gcp_accelerator_type} \
     --version=${gcp_tpu_vm_software_version} \
-    --preemptible \ 
+    --preemptible \
     --internal-ips \
     --subnetwork default \
-    --data-disk source=projects/${gcp_project_id}/zones/${gcp_zone}/disks/${destination_disk_name} \
+    --data-disk source=projects/${gcp_project_id}/zones/${gcp_zone}/disks/${destination_disk_name},mode=read-only \
     --metadata startup-script='#! /bin/bash
         sudo mkdir -pv /mnt/swift
         sudo mount -o defaults /dev/sdb /mnt/swift
@@ -23,6 +23,7 @@ do gcloud compute tpus tpu-vm create ${sweeper_vm_prefix}_${index} \
         cd /mnt/swift
         bash sweeper_setup.sh
         bash sweeper_launch.sh
-        EOF'
+        EOF' \
+    &
 
 done
